@@ -1,0 +1,42 @@
+[sssd]
+config_file_version = 2
+domains = <%= node['sssd_adcli']['realm'].downcase %>
+services = nss, pam<% if node['sssd_adcli']['sssd']['additional_services'] %>, <%= node['sssd_adcli']['sssd']['additional_services'].join(', ')%><% end %>
+
+[domain/<%= node['sssd_adcli']['realm'].downcase %>]
+id_provider = ad
+access_provider = ad
+ad_domain = <%= node['sssd_adcli']['realm'].downcase %>
+krb5_realm = <%= node['sssd_adcli']['realm'].upcase %>
+<% if node['sssd_adcli']['sssd']['krb5_store_password_if_offline'] %>krb5_store_password_if_offline = <%= node['sssd_adcli']['sssd']['krb5_store_password_if_offline'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['ldap_id_mapping'] %>ldap_id_mapping = <%= node['sssd_adcli']['sssd']['ldap_id_mapping'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['use_fully_qualified_names'] %>use_fully_qualified_names = <%= node['sssd_adcli']['sssd']['use_fully_qualified_names'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['access_filter'] %>ad_access_filter = <%= node['sssd_adcli']['access_filter'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['cache_credentials'] %>cache_credentials = <%= node['sssd_adcli']['sssd']['cache_credentials'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['default_shell'] %>default_shell = <%= node['sssd_adcli']['sssd']['default_shell'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['fallback_homedir'] %>fallback_homedir = <%= node['sssd_adcli']['sssd']['fallback_homedir'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['override_homedir'] %>override_homedir = <%= node['sssd_adcli']['sssd']['override_homedir'] %>
+<% end %>
+<% if node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>ad_gpo_map_batch = <%= node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>
+<% end %>
+
+<% if node['sssd_adcli']['sssd']['nss'] %>
+[nss]
+<% if node['sssd_adcli']['sssd']['nss']['filter_users'] %>filter_users = <%= node['sssd_adcli']['sssd']['nss']['filter_users'] %>
+<% end %>
+<% end %>
+
+<% node['sssd_adcli']['sssd']['additional_services'].each do |svc| %>
+[<%= svc %>]
+<% if node['sssd_adcli']['sssd'][svc] %>
+<% node['sssd_adcli']['sssd'][svc].each do |k,v| %><%= k %> = <%= v %>
+<% end %>
+<% end %>
+<% end %>

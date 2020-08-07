@@ -1,0 +1,27 @@
+{
+    "name": "sssd_adcli",
+    "version": "1.0.2",
+    "description": "Joins a Linux host to an Active Directory domain using SSSD and adcli",
+    "long_description": "Installs/Configures SSSD for AD integration",
+    "maintainer": "Dan Clough",
+    "maintainer_email": "dan@clough.xyz",
+    "license": "apache2",
+    "platforms": {
+        "debian": ">= 8.0",
+        "ubuntu": ">= 0.0.0"
+    },
+    "dependencies": {
+        "chef-vault": ">= 2.0",
+        "ntp": ">= 0.0.0"
+    },
+    "recommendations": {},
+    "suggestions": {},
+    "conflicting": {},
+    "providing": {},
+    "replacing": {},
+    "attributes": {},
+    "groupings": {},
+    "recipes": {},
+    "chef_version": [],
+    "ohai_version": []
+}

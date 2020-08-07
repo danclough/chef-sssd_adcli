@@ -1,0 +1,23 @@
+[logging]
+    kdc = SYSLOG:WARN:DAEMON
+    admin_server = SYSLOG:WARN:DAEMON
+    default = SYSLOG:WARN:DAEMON
+
+[libdefaults]
+  default_realm = <%= node['sssd_adcli']['realm'].upcase %>
+  dns_lookup_realm = false
+  <% unless node['sssd_adcli']['dc'] -%>dns_lookup_kdc = true<% end -%>
+  ticket_lifetime = 24h
+  renew_lifetime = 7d
+
+[realms]
+  <%= node['sssd_adcli']['realm'].upcase %> = {
+    <% if node['sssd_adcli']['dc'] -%>
+    kdc = <%= node['sssd_adcli']['dc'] %>
+    admin_server = <%= node['sssd_adcli']['dc'] %>
+    <% end -%>
+  }
+
+[domain_realm]
+  .<%= node['sssd_adcli']['realm'].downcase %> = <%= node['sssd_adcli']['realm'].upcase %>
+  <%= node['sssd_adcli']['realm'].downcase %> = <%= node['sssd_adcli']['realm'].upcase %>
