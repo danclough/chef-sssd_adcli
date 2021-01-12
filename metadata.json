@@ -1,6 +1,6 @@
 {
     "name": "sssd_adcli",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Joins a Linux host to an Active Directory domain using SSSD and adcli",
     "long_description": "Installs/Configures SSSD for AD integration",
     "maintainer": "Dan Clough",

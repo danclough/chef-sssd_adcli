@@ -26,6 +26,8 @@ krb5_realm = <%= node['sssd_adcli']['realm'].upcase %>
 <% end %>
 <% if node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>ad_gpo_map_batch = <%= node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>
 <% end %>
+<% if node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>ad_maximum_machine_account_password_age = <%= node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>
+<% end %>
 
 <% if node['sssd_adcli']['sssd']['nss'] %>
 [nss]
