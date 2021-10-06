@@ -1,7 +1,7 @@
 [sssd]
 config_file_version = 2
 domains = <%= node['sssd_adcli']['realm'].downcase %>
-services = nss, pam<% if node['sssd_adcli']['sssd']['additional_services'] %>, <%= node['sssd_adcli']['sssd']['additional_services'].join(', ')%><% end %>
+services = nss, pam<% if node['sssd_adcli']['sssd']['services'].keys %>, <%= node['sssd_adcli']['sssd']['services'].keys.join(', ')%><% end %>
 
 [domain/<%= node['sssd_adcli']['realm'].downcase %>]
 id_provider = ad
@@ -26,24 +26,17 @@ krb5_realm = <%= node['sssd_adcli']['realm'].upcase %>
 <% end %>
 <% if node['sssd_adcli']['sssd']['ad_gpo_access_control'] %>ad_gpo_access_control = <%= node['sssd_adcli']['sssd']['ad_gpo_access_control'] %>
 <% end %>
-<%= if node['sssd_adcli']['sssd']['ad_gpo_map'] %>
-<% node['sssd_adcli']['sssd']['ad_gpo_map'].each do [k,v] %>
-ad_gpo_map_<%= k %> = <%= v.join(", ") %>
+<% if node['sssd_adcli']['sssd']['ad_gpo_map'] %>
+<% node['sssd_adcli']['sssd']['ad_gpo_map'].each do |k,v| %>ad_gpo_map_<%= k %> = <%= v.join(", ") %>
 <% end %>
 <% end %>
 <% if node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>ad_maximum_machine_account_password_age = <%= node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>
 <% end %>
 
-<% if node['sssd_adcli']['sssd']['nss'] %>
-[nss]
-<% if node['sssd_adcli']['sssd']['nss']['filter_users'] %>filter_users = <%= node['sssd_adcli']['sssd']['nss']['filter_users'] %>
-<% end %>
-<% end %>
-
-<% node['sssd_adcli']['sssd']['additional_services'].each do |svc| %>
-[<%= svc %>]
-<% if node['sssd_adcli']['sssd'][svc] %>
-<% node['sssd_adcli']['sssd'][svc].each do |k,v| %><%= k %> = <%= v %>
+<% if node['sssd_adcli']['sssd']['services'] %>
+<% node['sssd_adcli']['sssd']['services'].each do |name,hash| %>
+[<%= name %>]
+<% node['sssd_adcli']['sssd']['services'][name].each do |k,v| %><%= k %> = <%= v %>
 <% end %>
 <% end %>
 <% end %>
