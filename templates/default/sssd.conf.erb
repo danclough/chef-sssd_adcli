@@ -24,7 +24,12 @@ krb5_realm = <%= node['sssd_adcli']['realm'].upcase %>
 <% end %>
 <% if node['sssd_adcli']['sssd']['override_homedir'] %>override_homedir = <%= node['sssd_adcli']['sssd']['override_homedir'] %>
 <% end %>
-<% if node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>ad_gpo_map_batch = <%= node['sssd_adcli']['sssd']['ad_gpo_map_batch'] %>
+<% if node['sssd_adcli']['sssd']['ad_gpo_access_control'] %>ad_gpo_access_control = <%= node['sssd_adcli']['sssd']['ad_gpo_access_control'] %>
+<% end %>
+<%= if node['sssd_adcli']['sssd']['ad_gpo_map'] %>
+<% node['sssd_adcli']['sssd']['ad_gpo_map'].each do [k,v] %>
+ad_gpo_map_<%= k %> = <%= v.join(", ") %>
+<% end %>
 <% end %>
 <% if node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>ad_maximum_machine_account_password_age = <%= node['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age'] %>
 <% end %>
