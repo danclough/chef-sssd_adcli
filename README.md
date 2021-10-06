@@ -16,16 +16,35 @@ Attributes
 - `['sssd_adcli']['use_ntp']` - configure NTP to sync with the primary domain controller; defaults to false.
 - `['sssd_adcli']['join']` - indicates to attempt to join the system to the domain if not already joined; defaults to false.  Requires credentials in a vault as listed below.
 - `['sssd_adcli']['sssd']['access_filter']` - optional `ad_access_filter` for the joined domain, e.g. "`(&(sAMAccountName=jo*)(unixHomeDirectory=*))`"
-- `['sssd_adcli']['sssd']['nss_filter_users']` - optional comma separated string of users to be excluded from the AD search; see `sssd.conf` man page
 - `['sssd_adcli']['sssd']['cache_credentials']` - boolean to enable SSSD credential caching; defaults to false
 - `['sssd_adcli']['sssd']['default_shell']` - the default shell assigned to all AD users.
 - `['sssd_adcli']['sssd']['fallback_homedir']` - the fallback home directory path for all AD users if their configured home directory path is not available.
 - `['sssd_adcli']['sssd']['override_homedir']` - a forced home directory path for all AD users, overriding any settings configured in AD.
 - `['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age']` - the interval at which SSSD should attempt to update the AD trust password.  If set to 0, SSSD will not automatically change the trust password and this must be done via cron with `net ads changetrustpw`.
+- `['sssd_adcli']['sssd']['ad_gpo_map']` - a hash of arrays for `ad_gpo_map_*` entries to be generated dynamically in `sssd.conf`.  Note that the values you provide are not validated in SSSD when generating the config file.  Refer to the `sssd.conf` man pages for acceptable values and syntax. For example:
+```
+"ad_gpo_map": {
+  "batch": [
+    "+cron",
+    "-crond"
+  ],
+  "foo": [
+    "-bar",
+    "+baz"
+  ]
+}
+
+ad_gpo_map_batch = +cron, -crond
+ad_gpo_map_foo = -bar, +baz
+```
 - `['sssd_adcli']['sssd']['services']` - an hash of additional services to configure in the `sssd.conf` file.  Each hash entry will be parsed as a hash of key=>value pairs and translated directly into `sssd.conf` lines.  For instance, a hash of `"nss": { "filter_groups": "root" }` will generate the following block:
 ```
+"nss": {
+  "filter_groups": "root, admin"
+}
+
 [nss]
-filter_groups = root
+filter_groups = root, admin
 ```
 - `['sssd_adcli']['adcli']['vault_name']` - name of the Chef Vault containing domain credentials.
 - `['sssd_adcli']['adcli']['vault_item']` - name of the vault item containing domain credentials as `username` and `password` properties.
