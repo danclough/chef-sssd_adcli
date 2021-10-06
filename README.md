@@ -22,8 +22,11 @@ Attributes
 - `['sssd_adcli']['sssd']['fallback_homedir']` - the fallback home directory path for all AD users if their configured home directory path is not available.
 - `['sssd_adcli']['sssd']['override_homedir']` - a forced home directory path for all AD users, overriding any settings configured in AD.
 - `['sssd_adcli']['sssd']['ad_maximum_machine_account_password_age']` - the interval at which SSSD should attempt to update the AD trust password.  If set to 0, SSSD will not automatically change the trust password and this must be done via cron with `net ads changetrustpw`.
-- `['sssd_adcli']['sssd']['additional_services']` - an array of additional services to configure in the `sssd.conf` file.  Parameters for each service will be pulled from
- `['sssd_adcli']['sssd'][service_name]` for each service listed here.  Use with caution, as the values listed here are not validated.
+- `['sssd_adcli']['sssd']['services']` - an hash of additional services to configure in the `sssd.conf` file.  Each hash entry will be parsed as a hash of key=>value pairs and translated directly into `sssd.conf` lines.  For instance, a hash of `"nss": { "filter_groups": "root" }` will generate the following block:
+```
+[nss]
+filter_groups = root
+```
 - `['sssd_adcli']['adcli']['vault_name']` - name of the Chef Vault containing domain credentials.
 - `['sssd_adcli']['adcli']['vault_item']` - name of the vault item containing domain credentials as `username` and `password` properties.
 
